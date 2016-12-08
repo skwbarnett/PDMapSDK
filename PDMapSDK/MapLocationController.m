@@ -15,12 +15,15 @@
 #import "MBProgressHUD+Bnt.h"
 #import "BntAttendanceManager.h"
 #import "PDApiAttenAnalyse.h"
+#import "BntAttendanceStatusAnalyse.h"
 
 @interface MapLocationController ()
 
 @property (nonatomic, strong) NSMutableArray *missionMArr;
 
 @property (nonatomic, strong) NSMutableArray *locationMArr;
+
+@property (nonatomic, strong) BntAttendanceStatusAnalyse *statusAnalyse;
 
 @end
 
@@ -54,15 +57,33 @@ static NSString *cellId = @"cellid";
     }];
 }
 
+- (BOOL)GPSAuthorization{
+    if (![BntAttendanceManager locationAuthorizationStatus]) {
+        NSLog(@"123");
+        [[[CLLocationManager alloc] init] requestAlwaysAuthorization];
+        return NO;
+    }else return YES;
+}
+
+
 //  定位
 - (void)attenMapLocation{
+    [self GPSAuthorization];
     __weak typeof (self)weakSelf = self;
-    BntAttendanceManager *manager = [BntAttendanceManager defaultManager];
-    BntAttendanceCommand *command = [BntAttendanceCommand command];
-    command.commandId = @(1001).stringValue;
-    command.commandType = AttendanceCommandTypeLocation;
+//    BntAttendanceManager *manager = [BntAttendanceManager defaultManager];
+//    BntAttendanceCommand *command = [BntAttendanceCommand command];
+//    command.commandId = @(1001).stringValue;
+//    command.commandType = AttendanceCommandTypeLocation;
     [MBProgressHUD showIndeterminate];
-    [manager locationUnderCommand:command success:^(BntLoc_AttenResponse *response) {
+//    [manager locationUnderCommand:command success:^(BntLoc_AttenResponse *response) {
+//        [weakSelf interactConfirmHTTP:@"12345" location:response];
+//        manager.locationErrerTime = 0;
+//    } failure:^(BntLoc_AttenResponse *response) {
+//        manager.locationErrerTime ++;
+//        NSLog(@"%@",response);
+//    }];
+
+    [self.statusAnalyse attendanceStatusSuccess:^(BntLoc_AttenResponse *response) {
         [weakSelf interactConfirmHTTP:@"12345" location:response];
     } failure:^(BntLoc_AttenResponse *response) {
         NSLog(@"%@",response);
@@ -119,6 +140,11 @@ static NSString *cellId = @"cellid";
 
 - (void)viewDidAppear:(BOOL)animated{
     [self headerConfigure];
+    [self.statusAnalyse startAutomaticLBSMode];
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [self.statusAnalyse stopAutomaticLBSMode];
 }
 
 #pragma mark construct layout
@@ -153,6 +179,13 @@ static NSString *cellId = @"cellid";
         _locationMArr = [NSMutableArray array];
     }
     return _locationMArr;
+}
+
+- (BntAttendanceStatusAnalyse *)statusAnalyse{
+    if (_statusAnalyse == nil) {
+        _statusAnalyse = [BntAttendanceStatusAnalyse statusAnalyseInit];
+    }
+    return _statusAnalyse;
 }
 
 @end

@@ -13,7 +13,7 @@
 #import <MAMapKit/MAMapKit.h>
 #import "ViewController.h"
 #import "MapLocationController.h"
-#define AMapKey @"abd8982732469a294eb11e6fc9b828fa"
+#define AMapKey @"2a11f3ce96c6a9e01343ca9cd2e32403"
 
 @interface AppDelegate ()
 

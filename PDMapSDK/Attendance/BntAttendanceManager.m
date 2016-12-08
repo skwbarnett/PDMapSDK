@@ -25,10 +25,19 @@
     static dispatch_once_t once;
     dispatch_once(&once, ^{
         defaultManger = [[self alloc] init];
+        defaultManger.locationErrorTime = 0;
+        defaultManger.autoLocationErrorTime = 0;
         [defaultManger configureData];
     });
     
     return defaultManger;
+}
+
++ (BOOL)locationAuthorizationStatus{
+    if ([CLLocationManager locationServicesEnabled] &&
+        !([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied)) {
+        return YES;
+    }else return NO;
 }
 
 - (void)configureData{
@@ -36,19 +45,29 @@
 }
 
 - (void)locationUnderCommand:(BntAttendanceCommand *)command success:(AttendanceLocationComplete)success failure:(AttendanceLocationComplete)failure{
-
+    __weak typeof (self)weakSelf = self;
     if (command.commandType == AttendanceCommandTypeLocation) {
         BntAtten_LocRequest *requst = [self configureAtten_LocationRequest:command];
         BntLocationConfigure *locConfigure = [BntLocationConfigure initlocationConfigure];
         locConfigure.allowsBackgroundLocationUpdates = YES;
-        locConfigure.locationTimeout = 10;
-        locConfigure.reGeocodeTimeout = 15;
-        
+        locConfigure.locationTimeout = 2;
+        locConfigure.reGeocodeTimeout = 2;
+        self.userLocation.locationConfigure = locConfigure;
         [self.userLocation requestLoactionWithRequest:requst success:^(BntLoc_AttenResponse *result) {
+            [weakSelf RSSIAnalyse:result];
             success(result);
         } failure:^(BntLoc_AttenResponse *result) {
             failure(result);
         }];
+    }
+}
+
+- (void)RSSIAnalyse:(BntLoc_AttenResponse *)result{
+    CLLocation *loction = result.locResponse.location;
+    if (loction.horizontalAccuracy > 200) {
+        result.isNonGPSRSSI = YES;
+    }else{
+        result.isNonGPSRSSI = NO;
     }
 }
 

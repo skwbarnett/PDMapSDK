@@ -28,7 +28,9 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
+	<string>需要开启GPS定位</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>需要开启GPS定位</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

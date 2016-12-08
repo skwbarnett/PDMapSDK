@@ -26,5 +26,7 @@
 @property (nonatomic, strong) NSString *requestTimestamp;
 
 @property (nonatomic, strong) NSString *responseTimestamp;
+//  信号不稳定
+@property (nonatomic, assign) BOOL isNonGPSRSSI;
 
 @end
