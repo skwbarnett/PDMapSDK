@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[BntAttendanceStatusAnalyse locationErrerOperation:]:BntAttendanceStatusAnalyse.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "_LBSManager">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "__62-[BntAttendanceStatusAnalyse attendanceStatusSuccess:failure:]_block_invoke.28:BntAttendanceStatusAnalyse.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[BntAttendanceStatusAnalyse automaticModeErrorOperation:]:BntAttendanceStatusAnalyse.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "_LBSManager">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
